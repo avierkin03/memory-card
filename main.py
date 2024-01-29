@@ -1,10 +1,11 @@
-from PyQt5.QtWidgets import QWidget, QApplication
+from PyQt5.QtWidgets import QApplication
 from random import shuffle, choice
 
 app = QApplication([])
 from main_window import*
 
-class Question():
+#клас для запитання
+class Question:
     def __init__(self, question, answer, wrong_answer1, wrong_answer2, wrong_answer3):
         self.question = question
         self.answer = answer
@@ -13,61 +14,55 @@ class Question():
         self.wrong_answer3 = wrong_answer3
         self.attempts = 0
         self.correct = 0
-
     def got_right(self):
         self.attempts += 1
         self.correct += 1
-
     def got_wrong(self):
         self.attempts += 1
 
-q1 = Question("Яблуко", "apple", "application", "pineapple", "apply")
-q2 = Question("Число", "number", "amount", "summary", "tree")
+#створюємо 4 питання (об'єкти класу Question)
+q1 = Question('Яблуко', 'apple', 'application', 'pinapple', 'apply')
+q2 = Question('Дім', 'house', 'horse', 'hurry', 'hour')
+q3 = Question('Миша', 'mouse', 'mouth', 'muse', 'museum')
+q4 = Question('Число', 'number', 'digit', 'amount', 'summary')
 
+#список кнопок та список запитань
 radio_buttons = [rbtn_1, rbtn_2, rbtn_3, rbtn_4]
-questions = [q1, q2]
+questions = [q1, q2, q3, q4]
 
-#функція яка відображає нове питання та варіанти відповідей до нього
+#функція, яка відображає нове питання та варіанти відповідей на нього
 def new_question():
-    global cur_questions
-    cur_questions = choice(questions)
-    lb_Question.setText(cur_questions.question)
-    lb_Correct.setText(cur_questions.answer)
+    global cur_question
+    #обираємо sрандомне питання
+    cur_question = choice(questions)
+    lb_Question.setText(cur_question.question)
+    lb_Correct.setText(cur_question.answer)
+    #перемішуємо радіокнопки
     shuffle(radio_buttons)
-    radio_buttons[0].setText(cur_questions.wrong_answer1)
-    radio_buttons[1].setText(cur_questions.wrong_answer2)
-    radio_buttons[2].setText(cur_questions.wrong_answer3)
-    radio_buttons[3].setText(cur_questions.answer)
-
-def click_ok():
-    if btn_OK.text() == "Відповісти":
-        RadioGroupBox.hide()
-        AnsGroupBox.show()
-        btn_OK.setText("Наступне запитання")
-    else:
-        AnsGroupBox.hide()
-        RadioGroupBox.show()
-        btn_OK.setText("Відповісти")
-
-btn_OK.clicked.connect(click_ok)
-    
-
+    #розставляємо варіанти відповідей по кнопкам
+    radio_buttons[0].setText(cur_question.wrong_answer1)
+    radio_buttons[1].setText(cur_question.wrong_answer2)
+    radio_buttons[2].setText(cur_question.wrong_answer3)
+    radio_buttons[3].setText(cur_question.answer)
 
 new_question()
 
+#функція, яка спрацьовує при натисканні на кнопку 'Відповісти'\Наступне запитання'
+def click_ok():
+    #переключаємось на 'коробку' з результатом
+    if btn_OK.text() == 'Відповісти':
+        RadioGroupBox.hide()
+        AnsGroupBox.show()
+        btn_OK.setText('Наступне запитання')
+    #переключаємось на 'коробку' з питанням
+    else:
+        new_question()
+        RadioGroupBox.show()
+        AnsGroupBox.hide()
+        btn_OK.setText('Відповісти')
 
+#підключаємо функцію click_ok() до кнопки 'Відповісти'\Наступне запитання'
+btn_OK.clicked.connect(click_ok)
 
-
-
-
-
-win_card = QWidget()
-win_card.resize(600, 500)
-win_card.move(300, 300)
-win_card.setWindowTitle("Memory Card")
-
-win_card.setLayout(layout_card)
-
-
-win_card.show()
+window.show()
 app.exec()
