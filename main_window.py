@@ -38,7 +38,7 @@ layout_ans3.addWidget(rbtn_4)
 layout_ans1.addLayout(layout_ans2)  #розмістили стопці в одному рядку
 layout_ans1.addLayout(layout_ans3)
 
-RadioGroupBox.setLayout(layout_ans1) #готова панель зваріаантами відпоідей
+RadioGroupBox.setLayout(layout_ans1) #готова панель зваріантами відпоідей
 
 
 #Панель із результатом
@@ -86,7 +86,5 @@ layout_card.addLayout(layout_line4, stretch=1)
 layout_card.addStretch(1)
 layout_card.setSpacing(5)  #прогалини між вмістом
 
-
-#встановлюємо леяут з інтерфейсом у вікно та задаємо розміри вікна
 window.setLayout(layout_card)
-window.resize(600, 500)
+window.resize(600,500)
