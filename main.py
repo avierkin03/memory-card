@@ -4,6 +4,7 @@ from time import sleep
 
 app = QApplication([])
 from main_window import*
+from menu_window import*
 
 #клас для запитання
 class Question():
@@ -13,12 +14,14 @@ class Question():
         self.wrong_answer1 = wrong_answer1
         self.wrong_answer2 = wrong_answer2  
         self.wrong_answer3 = wrong_answer3 
-        self.correct = 0
-        self.attempts = 0
+        self.correct = 0       #к-ть правильних відповідей
+        self.attempts = 0      #загальна к-ть спроб відповісти
+
     def got_right(self):
         self.correct += 1
         self.attempts += 1
         print("Це правильна відповідь!")
+        
     def got_wrong(self):
         self.attempts += 1
         print("Відповідь неправильна")
@@ -88,6 +91,7 @@ def click_ok():
 #підключаємо функцію click_ok() до кнопки "Відповісти\Наступне питання"
 btn_OK.clicked.connect(click_ok)
 
+
 #Функція, яка запускає "Відпочинок"
 def rest():
     window.hide()
@@ -97,6 +101,55 @@ def rest():
 
 #підключаємо функцію rest() до кнопки "Відпочити"
 btn_Sleep.clicked.connect(rest)
+
+
+#Фукція, яка відкриває екран меню та ховає головний екран, а також підраховує статистику
+def menu_generation():
+    if cur_question.attempts == 0:
+        success = 0
+    else:
+        success = (cur_question.correct/cur_question.attempts)*100
+
+    text = f'Разів відповіли: {cur_question.attempts}\n' \
+           f'Вірних відповідей: {cur_question.correct}\n' \
+           f'Успішність: {round(success, 2)}%'
+    lb_statistic.setText(text)
+    menu_window.show()
+    window.hide()
+
+#підключаємо функцію menu_generation() до кнопки "Меню"
+btn_Menu.clicked.connect(menu_generation)
+
+
+#Фукція, яка відкриває головний екран та ховає меню
+def back_menu():
+    menu_window.hide()
+    window.show()
+
+#підключаємо функцію back_menu() до кнопки "Назад"
+btn_back.clicked.connect(back_menu)
+
+
+#Фукція, яка очищає значення всіх QLineEdit
+def clear():
+    le_question.clear()
+    le_right_ans.clear()
+    le_wrong_ans1.clear()
+    le_wrong_ans2.clear()
+    le_wrong_ans3.clear()
+
+#підключаємо функцію clear() до кнопки "Очистити"
+btn_clear.clicked.connect(clear)
+
+
+#Фукція, яка додає нове запитання до списку питань
+def add_question():
+    new_q = Question(le_question.text(), le_right_ans.text(), le_wrong_ans1.text(), le_wrong_ans2.text(), le_wrong_ans3.text())
+    questions.append(new_q)
+    clear()
+
+#підключаємо функцію add_question() до кнопки "Додати"
+btn_add_question.clicked.connect(add_question)
 
 
 window.show()
